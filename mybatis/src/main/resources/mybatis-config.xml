@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--指定使用 LOG4J 输出日志-->
+        <setting name="logImpl" value="LOG4J"/>
+        <!--配置该项是为了 动态sql在查询数据后返回的字段field下划线形式自动映射到驼峰形式java属性上
+        （当然只针对返回指定为resultType的）
+        该属性默认为false-->
+        <!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->
+    </settings>
+
+    <typeAliases>
+        <!--配置全限定名称前缀-->
+        <package name="top.justin.ch01.model"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC">
+                <property name="" value=""/>
+            </transactionManager>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url"
+                          value="jdbc:mysql://127.0.0.1:3306/mybatis?allowPublicKeyRetrieval=true&amp;useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="88888888"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--mapper文件的路径-->
+        <mapper resource="mapper/CountryMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <!--上面方法麻烦不用，可以使用直接引入mapper接口包的方法,会自动去加载解析对应的xml的mapper-->
+        <!--<package name="top.justin.ch02.mapper"/>-->
+    </mappers>
+
+</configuration>
