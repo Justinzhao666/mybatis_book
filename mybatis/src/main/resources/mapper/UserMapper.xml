@@ -12,10 +12,38 @@
 		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
 	</resultMap>
 
+	<!--<resultMap id="必填!标识这个map,让别的来引用" type="必填!查询结果要映射的对象" extends="继承自哪个其他的resultMap的id"-->
+	<!--autoMapping="true或者false是否开启非字段映射：下面没有配置的条目是否自动映射">-->
+	<!--<id/> &lt;!&ndash;一个 id 结果，标记结果作为 id (唯一值)，可以帮助提高整体性能。&ndash;&gt;-->
+	<!--<result column="数据库查出的列名"-->
+	<!--property="实体类的属性字段-address.street.number可以通过这样进行嵌套赋值哦！"-->
+	<!--javaType="一个Java类的完全限定名或一个类型别名(通过 typeAlias 配置或者 默认的类型)-->
+	<!--对于一个javaBean可以自动判断，但是如何映射的是hashmap必须指定javaType"-->
+	<!--jdbcType="列对应的数据库类型。"-->
+	<!--typeHandler="使用这个属性可以覆盖默认的类型处理器"-->
+	<!--/>&lt;!&ndash;注入到 Java对象属性的普通结果&ndash;&gt;-->
+	<!--<association property=""/> &lt;!&ndash;一个复杂的类型关联，许多结果将包成这种类型 。&ndash;&gt;-->
+	<!--<collection property=""/> &lt;!&ndash;复杂类型的集合。&ndash;&gt;-->
+
+	<!--<constructor> &lt;!&ndash;配置使用构造方法注入结果 里面arg和idArg和外面的id和result相同，只是会通过构造方法进行注入&ndash;&gt;-->
+	<!--<arg>id参数 和 外围的id相同</arg>-->
+	<!--<idArg>注入到构造方法的一个普通结果：等同于外面的result</idArg>-->
+	<!--</constructor>-->
+	<!--<discriminator javaType=""> &lt;!&ndash;根据结果值来决定使用哪个结果映射。&ndash;&gt;-->
+	<!--<case value=""/> &lt;!&ndash;基于某些值的结果映射。&ndash;&gt;-->
+	<!--</discriminator>-->
+	<!--</resultMap>-->
+
+
+	<!--
+	resultMap 来进行返回值映射的，已经配置了数据库查询字段和实体类字段之间的映射关系
+	resultType 进行映射的时候，如果查询的数据库字段和实体类不同，需要起别名。
+	-->
+
 	<select id="selectById" resultMap="userMap">
 		SELECT * FROM sys_user WHERE id = #{id}
 	</select>
-
+	<!--如果返回值是list也会自动转-->
 	<select id="selectAll" resultType="top.justin.ch02.model.SysUser">
 	    select id,
 	    	user_name userName,
