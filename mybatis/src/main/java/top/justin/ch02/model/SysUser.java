@@ -1,6 +1,7 @@
 package top.justin.ch02.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -120,4 +121,18 @@ public class SysUser implements Serializable {
 		this.roleList = roleList;
 	}
 
+	@Override
+	public String toString() {
+		return "SysUser{" +
+				"id=" + id +
+				", userName='" + userName + '\'' +
+				", userPassword='" + userPassword + '\'' +
+				", userEmail='" + userEmail + '\'' +
+				", userInfo='" + userInfo + '\'' +
+				", headImg=" + Arrays.toString(headImg) +
+				", createTime=" + createTime +
+				", role=" + role +
+				", roleList=" + roleList +
+				'}';
+	}
 }

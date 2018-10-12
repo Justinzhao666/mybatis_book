@@ -27,9 +27,19 @@ public class SysRole implements Serializable {
 	 */
 	private Date createTime;
 	/**
-	 * 用户信息
+	 * 用户信息 --- 多表查询组合
 	 */
 	private SysUser user;
+
+	private Integer enabled;
+
+	public Integer getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Integer enabled) {
+		this.enabled = enabled;
+	}
 
 	/**
 	 * 角色包含的权限列表
@@ -79,6 +89,7 @@ public class SysRole implements Serializable {
 	public SysUser getUser() {
 		return user;
 	}
+
 
 	public void setUser(SysUser user) {
 		this.user = user;

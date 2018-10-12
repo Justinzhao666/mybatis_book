@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.justin.ch02.mapper.UserMapper">
+    <resultMap id="userMap" type="top.justin.ch02.model.SysUser">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassword" column="user_password"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userInfo" column="user_info"/>
+        <result property="headImg" column="head_img" jdbcType="BLOB"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--<resultMap id="必填!标识这个map,让别的来引用" type="必填!查询结果要映射的对象" extends="继承自哪个其他的resultMap的id"-->
+    <!--autoMapping="true或者false是否开启非字段映射：下面没有配置的条目是否自动映射">-->
+    <!--<id/> &lt;!&ndash;一个 id 结果，标记结果作为 id (唯一值)，可以帮助提高整体性能。&ndash;&gt;-->
+    <!--<result column="数据库查出的列名"-->
+    <!--property="实体类的属性字段-address.street.number可以通过这样进行嵌套赋值哦！"-->
+    <!--javaType="一个Java类的完全限定名或一个类型别名(通过 typeAlias 配置或者 默认的类型)-->
+    <!--对于一个javaBean可以自动判断，但是如何映射的是hashmap必须指定javaType"-->
+    <!--jdbcType="列对应的数据库类型。"-->
+    <!--typeHandler="使用这个属性可以覆盖默认的类型处理器"-->
+    <!--/>&lt;!&ndash;注入到 Java对象属性的普通结果&ndash;&gt;-->
+    <!--<association property=""/> &lt;!&ndash;一个复杂的类型关联，许多结果将包成这种类型 。&ndash;&gt;-->
+    <!--<collection property=""/> &lt;!&ndash;复杂类型的集合。&ndash;&gt;-->
+
+    <!--<constructor> &lt;!&ndash;配置使用构造方法注入结果 里面arg和idArg和外面的id和result相同，只是会通过构造方法进行注入&ndash;&gt;-->
+    <!--<arg>id参数 和 外围的id相同</arg>-->
+    <!--<idArg>注入到构造方法的一个普通结果：等同于外面的result</idArg>-->
+    <!--</constructor>-->
+    <!--<discriminator javaType=""> &lt;!&ndash;根据结果值来决定使用哪个结果映射。&ndash;&gt;-->
+    <!--<case value=""/> &lt;!&ndash;基于某些值的结果映射。&ndash;&gt;-->
+    <!--</discriminator>-->
+    <!--</resultMap>-->
+
+
+    <!--
+    resultMap 来进行返回值映射的，已经配置了数据库查询字段和实体类字段之间的映射关系
+    resultType 进行映射的时候，如果查询的数据库字段和实体类不同，需要起别名。
+    -->
+
+    <select id="selectById" resultMap="userMap">
+		SELECT * FROM sys_user WHERE id = #{id}
+	</select>
+    <!--如果返回值是list也会自动转-->
+    <select id="selectAll" resultType="top.justin.ch02.model.SysUser">
+	    select id,
+	    	user_name userName,
+	        user_password userPassword,
+	        user_email userEmail,
+	        user_info userInfo,
+	        head_img headImg,
+	        create_time createTime
+	    from sys_user
+	</select>
+
+    <!--
+    	多表查询
+     	    查询结果嵌套组合实体类 AS "user.userName"
+    -->
+    <select id="selectRolesByUserId" resultType="top.justin.ch02.model.SysRole">
+		SELECT
+		r.id,
+		r.role_name roleName,
+		r.enabled,
+		r.create_by createBy,
+		r.create_time createTime,
+		u.user_name AS "user.userName",
+		u.user_email AS "user.userEmail"
+		FROM sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+		WHERE u.id = #{userId}
+	</select>
+
+    <!--插入-->
+    <insert id="insert">
+		INSERT INTO sys_user(
+			user_name, user_password, user_email,
+			user_info, head_img, create_time)
+		VALUES (
+			#{userName}, #{userPassword}, #{userEmail},
+			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+
+
+    <!--
+    插入并获取mysql自增主键的值 useGeneratedKeys="true" keyProperty="id"
+    这样配置：当插入SysUser对象的时候，会自动映射内部的字段，然后将jdbc自动生成的主键id返回复制给keyProperty指定的id（SysUser对象中的）
+    如果要设置多个使用逗号隔开，一般还要定义keyColumn属性-是mysql的数据库列名，和要赋值的字段一一对应。
+    这样插完后，插入的对象会被赋予useGeneratedKeys配置获取到的值
+    -->
+    <insert id="insert2" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_user(
+		user_name, user_password,user_email,
+		user_info, head_img, create_time)
+		VALUES (
+		#{userName}, #{userPassword},#{userEmail},
+		#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+
+
+    <!--<insert id="方法id，命名空间中的唯一标识符，可用来代表这条语句"-->
+    <!--parameterType="传入的参数完全限定类名或者别名：可选，不建议配置该参数，MyBatis可以推断出传入语句的具体参数"-->
+    <!--flushCache="默认为true，任何时候只要该语句被调用，都会清空一级缓存和二级缓存"-->
+    <!--timeout="驱动程序等待数据库返回请求结果的秒数"-->
+    <!--statementType="使用Statement 、 PreparedStatement 、 CallableStatement哪个statement，默认为PREPARED"-->
+    <!--useGeneratedKeys="默认为False，若设置为true, MyBatis会使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键"-->
+    <!--keyProperty="MyBatis 通过 getGeneratedKeys 获取主键值后将要赋值的属性名 。 如果希望得到多个数据库自动生成的列，属性值也可以是以逗号分隔的属性名称列表"-->
+    <!--keyColumn="仅对INSERT和UPDATE有用。-->
+    <!--通过生成的键值设置表中的列名，这个设置仅在某些数据库(如 PostgreSQL)中是必须的,当主键列不是表中的第一列时需要设置。-->
+    <!--如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表"-->
+    <!--databaseId="如果配置了databaseIdProvider(4.6节有详细配置方法) &#45;&#45;不知所云-->
+    <!--MyBatis 会加载所有的不带databaseId的或匹配当前 databaseId 的语句 。如果同时存在带 databaseId 和不带 databaseId 的语句，后者会被忽略 "-->
+    <!--&gt;-->
+    <!--INSERT INTO atable(-->
+    <!--field1,field2,field3-->
+    <!--)VALUES (-->
+    <!--#{property1}, //从参数中取值-->
+    <!--#{property2,jdbcType=TIMESTAMP},-->
+    <!--#{property3}-->
+    <!--)-->
+    <!--</insert>-->
+
+	<update id="updateById">
+		update sys_user
+		set user_name = #{userName},
+			user_password = #{userPassword},
+			user_email = #{userEmail},
+			user_info = #{userInfo},
+			head_img = #{headImg, jdbcType=BLOB},
+			create_time = #{createTime, jdbcType=TIMESTAMP}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById">
+		delete from sys_user where id = #{id}
+	</delete>
+
+
+
+	<!--多个参数的查询-->
+	<select id="selectRolesByUserAndRole" resultType="top.justin.ch02.model.SysRole">
+	    select
+			r.id,
+			r.role_name roleName,
+			r.enabled,
+			r.create_by createBy,
+			r.create_time createTime
+		from sys_user u
+		inner join sys_user_role ur on u.id = ur.user_id
+		inner join sys_role r on ur.role_id = r.id
+	    where u.id = #{userId} and r.enabled = #{enabled}
+	</select>
+
+
+
+
+
+</mapper>

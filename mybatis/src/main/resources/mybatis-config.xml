@@ -9,7 +9,7 @@
         <!--配置该项是为了 动态sql在查询数据后返回的字段field下划线形式自动映射到驼峰形式java属性上
         （当然只针对返回指定为resultType的）
         该属性默认为false-->
-        <!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
     <typeAliases>
@@ -34,10 +34,9 @@
 
     <mappers>
         <!--mapper文件的路径-->
-        <mapper resource="mapper/CountryMapper.xml"/>
-        <mapper resource="mapper/UserMapper.xml"/>
+        <!--<mapper resource="mapper/CountryMapper.xml"/>-->
         <!--上面方法麻烦不用，可以使用直接引入mapper接口包的方法,会自动去加载解析对应的xml的mapper-->
-        <!--<package name="top.justin.ch02.mapper"/>-->
+        <package name="top.justin.ch02.mapper"/>
     </mappers>
 
 </configuration>
