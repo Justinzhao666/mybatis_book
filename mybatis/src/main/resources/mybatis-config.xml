@@ -37,6 +37,7 @@
         <!--<mapper resource="mapper/CountryMapper.xml"/>-->
         <!--上面方法麻烦不用，可以使用直接引入mapper接口包的方法,会自动去加载解析对应的xml的mapper-->
         <package name="top.justin.ch02.mapper"/>
+        <package name="top.justin.ch04.mapper"/>
     </mappers>
 
 </configuration>

@@ -37,7 +37,7 @@ public class CountryMapperTest extends BaseMapperTest {
             // sqlSession会找到对应mapper下的对应方法,然后执行sql语句。
             // ---不是的他会找所有的sqlsession识别的到的mapper文件下该方法id
             // 如果只要一个需要使用全限定类名来指定。 namespace是xml里面写的namespace
-            List<Country> countryList = sqlSession.selectList("top.justin.ch02.top.justin.ch02.mapper.CountryMapper.selectAll");
+            List<Country> countryList = sqlSession.selectList("top.justin.ch02.mapper.CountryMapper.selectAll");
             printCountryList(countryList);
         }
     }
