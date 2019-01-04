@@ -69,6 +69,30 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <!--mybatis Generator插件-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.3</version>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <dependencies>
+                    <!--generatorConfig.xml 里面有classPathEntry的配置，需要配置jdbc驱动包的依赖-->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.38</version>
+                    </dependency>
+                    <!--添加当前项目的依赖：如果自己写了一些MBG的定制实现类（实现接口那些），可以直接找到该项目自己定制的类-->
+                    <dependency>
+                        <groupId>top.zhaohaoren</groupId>
+                        <artifactId>mybatis</artifactId>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 

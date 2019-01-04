@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--第一步：添加dtd约束-->
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!--第二步：添加根节点-->
+<generatorConfiguration>
+
+    <!--自定义配置内容-->
+
+    <properties resource=""/>
+    <classPathEntry location=""/>
+
+
+    <!--一般情况下context配置-->
+    <context id="MySql" defaultModelType="flat"> <!--defaultModelType 配置这个flat一个表生成一个实体类，其他的可能会一个表生成多个-->
+        <!--配置property-->
+        <property name="autoDelimitKeywords" value="true"/>  <!--配置分隔符：该配置将自动为关键字添加分隔符-->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!--配置插件，可以配置0个以上-->
+        <plugin type="org.mybatis.generator.plugins.CachePlugin"> <!--这里配置的是缓存插件，会给生成的sql的xml加上缓存配置-->
+            <property name="cache_eviction" value="LRU"/>
+            <property name="cache_size" value="1024"/>
+        </plugin>
+        <!--配置生成的内容注释相关的-->
+        <commentGenerator type="top.justin.ch05.MyCommentGenerator">  <!--使用自定义的注释实现，如果想要采用默认去掉即可-->
+            <property name="suppressDate" value="true"/> <!--这些配置默认是false，true表示阻止注释-->
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        <!--配置连接的数据库信息-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/mybatis"
+                        userId="root"
+                        password="88888888"/>
+        <!--配置jdbc类型和java类型的转换，一般不建议配置修改该项-->
+        <javaTypeResolver>
+            <!--<property name="forceBigDecimals"   value="false"/>-->
+        </javaTypeResolver>
+        <!--配置生成的实体类，必须有且只有一个-->
+        <javaModelGenerator targetPackage="生成实体类包名"
+                            targetProject="生成实体类的路径"> <!--生成实体类的包名--> <!--目标项目路径（相对/绝对路径)-->
+            <property name="constructorBased" value="false"/> <!--true会生成构造函数，否则为set函数-->
+            <property name="enableSubPackages" value="false"/> <!--false直接使用targetPackage包（默认包），true会自动生成子包-->
+            <property name="immutable" value="false"/> <!--实体类属性是否可变-->
+            <property name="rootClass" value="类的全限定名称"/> <!--所有实体类的基类-->
+            <property name="trimStrings" value="false"/> <!--生成代码对set方法的时候，对输入string的做trim()-->
+        </javaModelGenerator>
+        <!--配置mapper.xml文件，可选，最多配置一个。不配置不生成xml-->
+        <sqlMapGenerator targetPackage="生成sql映射文件存放的包名" targetProject="指定项目的路径">
+            <property name="enableSubPackages" value="false"/> <!--是否依据catalog和schema生成子包，默认为false-->
+        </sqlMapGenerator>
+        <!--配置mapper.java文件的接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="" targetProject="" implementationPackage="指定存放的目录">
+        </javaClientGenerator>
+        <!--配置需要生成的表-->
+        <table tableName="%"/> <!--表示生成所有的表-->
+        <table tableName="user">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+            <!--
+            column:列名
+            sqlStatement:返回自增长值得sql语句，不同的数据库不同，有几个预定值，依据不同预定值生成对应数据库查询自增序列最后值的sql语句
+            也可以自己写sql语句，则生成的<selectKey>的sql语句为所设置的sql
+            还有两个非必选的：（不重要)
+            type:pre和post两个选择
+                pre: <selectKey>放在insert之前，此时identity必须为false，表示插入前获取数据最后一个id
+                post: <selectKey>如果identity为true生成的 selectKey 中 order=AFTER。
+                只要这个属性被执行，<selectKey>标签一定放在insert前面
+            identity:
+                true: 该列标记为identity列，<selectKey> 插入insert后面
+                false: <selectKey>会插入insert之前
+            http://www.mybatis.org/generator/configreference/generatedKey.html
+            -->
+            <columnRenamingRule searchString=""/>
+            <columnOverride column="重写的列名"
+                            property="java实体类生成的属性名"
+                            javaType="覆盖默认解析器解析的java类型"
+                            jdbcType="副高默认解析器解析的jdbc类型"
+                            typeHandler="设置类型处理器。MGB只负责插入，不负责判断处理类是否真的存在"
+                            delimitedColumnName="为列加上分隔符，如``"
+                            isGeneratedAlways=""/>
+            <ignoreColumn column="不需要生成的列"
+                          delimitedColumnName="是否区分大小写"/>
+
+        </table>
+    </context>
+    <!--不生成example的配置-->
+    <!--<context id="MySql" defaultModelType="flat" targetRuntime="MyBatis3Simple">-->
+
+</generatorConfiguration>
